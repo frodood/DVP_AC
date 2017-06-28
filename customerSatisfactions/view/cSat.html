@@ -1,0 +1,356 @@
+<div class="row">
+    <div class="col-md-12 col-sm-6 col-xs-12" pdf-save-content="idOne">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Customer Satisfactions</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li ng-show="false">
+                        <a class="close-link"><i class="fa fa-file-pdf-o" title="Save To PDF"
+                                                 pdf-save-button="idOne"
+                                                 pdf-name="CustomerSatisfactions.pdf"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-6 col-xs-12">
+                    <div class="x_content">
+                        <div class="row">
+                            <form id="csatForm" name="csatForm" novalidate>
+                                <div class="col-md-3 col-sm-3 col-xs-12 form-group"
+                                     ng-class="{ 'has-error' : csatForm.StartTime.$invalid && !csatForm.StartTime.$pristine }">
+                                    <label>Start Date</label>
+                                    <div>
+                                        <p class="input-group">
+                                            <input required name="StartTime" type="text" class="form-control"
+                                                   datetime-picker="MM/dd/yyyy HH:mm"
+                                                   ng-model="csatSerach.StartTime" is-open="StartTime.open"
+                                                   ng-class="{ 'has-error' : csatForm.StartTime.$invalid && !csatForm.StartTime.$pristine }"/>
+                                                    <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default"
+                                              ng-click="openCalendar('StartTime')"><i
+                                              class="fa fa-calendar"></i></button>
+                                  </span>
+                                        <p ng-show="csatForm.StartTime.$error.required && !csatForm.StartTime.$pristine"
+                                           class="help-block">
+                                            StartTime is required.</p>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-12 form-group"
+                                     ng-class="{ 'has-error' : csatForm.EndTime.$invalid && !csatForm.EndTime.$pristine }">
+                                    <label>End Date</label>
+
+                                    <div>
+                                        <p class="input-group">
+                                            <input name="EndTime" type="text" class="form-control"
+                                                   datetime-picker="MM/dd/yyyy HH:mm" min="csatSerach.StartTime"
+                                                   ng-model="csatSerach.EndTime" is-open="EndTime.open"
+                                                   required/>
+                                                    <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default" ng-click="openCalendar('EndTime')">
+                                          <i
+                                                  class="fa fa-calendar"></i></button>
+                                  </span>
+
+                                        <p ng-show="csatForm.EndTime.$error.required && !csatForm.EndTime.$pristine"
+                                           class="help-block">
+                                            EndTime is required.</p>
+
+                                        <p ng-show="csatForm.EndTime.$error.min && !csatForm.EndTime.$pristine"
+                                           class="help-block">
+                                            End time should be greater than start time.</p>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-12 form-group">
+                                    <label>Page Size</label>
+                                    <div>
+                                        <select class="form-control" id="Category" ng-model="pageSize"
+                                                ng-options="opt as opt for opt in pageSizRange">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <button ng-disabled="csatForm.$invalid" type="button"
+                                            ng-if="!isLoading"
+                                            class="btn btn-green btn-block "
+                                            style="margin-top: 24px;"
+                                            ng-click="searchData();">
+                                        Search
+                                    </button>
+                                    <button disabled type="button"
+                                            ng-if="isLoading"
+                                            class="btn btn-green btn-block"
+                                            style="margin-top: 24px;">
+                                        Please Wait...
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<!--ng-if="satisfactionRequest.length!=0"-->
+<div ng-if="satisfactionRequest.length!=0" class="row">
+    <div class="col-lg-4 col-md-4 col-xs-12">
+        <div class="chart-widget animated fadeIn">
+            <div class="widget-m-wrp">
+                <div class="widget-h">
+                    <h2>CSAT - Doughnut Chart </h2>
+                </div>
+                <div class="widget-body chart-center">
+                    <canvas class="chart chart-doughnut"
+                            width="300px" height="300px"
+                            chart-data="doughnutObj.data"
+                            chart-labels="doughnutObj.labels"
+                            chart-legend="true"
+                            chart-options="options">
+                    </canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-xs-12">
+        <div class="text-widget chart-ng-w-tr animated fadeIn  ">
+            <div class="widget-m-wrp ">
+                <div class="widget-h">
+                    <h2>Response & Satisfaction Rates </h2>
+                </div>
+                <div class="widget-body">
+                    <div class="text-w-row bg text-w-border-b ">
+                        <div class="col-xs-3 text-center w-bg-icon ">
+                            <i class="ti-pulse icon-green "></i>
+                        </div>
+                        <div class="col-xs-9 ">
+                            <div class="row">
+                                <div class="w-bg-text-bg text-left txt-color-b-500">
+                                    {{responseRate}} %
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="w-bg-text text-left icon-green">
+                                    Response Rate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-w-row bg">
+                        <div class="col-xs-3 text-center w-bg-icon">
+                            <i class="ti-face-smile icon-indeego"></i>
+                        </div>
+                        <div class="col-xs-9 w-bg-text-bg text-left">
+                            <div class="row">
+                                <div class="w-bg-text-bg text-left txt-color-b-500">
+                                    {{goodRate}}%
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="w-bg-text text-left icon-indeego">
+                                    Satisfaction Rate
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-xs-12">
+        <div class="chart-widget animated fadeIn">
+            <div class="widget-m-wrp">
+                <div class="widget-h">
+                    <h2>CSAT - Polar Area Chart</h2>
+                </div>
+                <div class="widget-body chart-center">
+                    <canvas class="chart chart-polar-area"
+                            width="300px" height="300px"
+                            chart-data="doughnutObj.data" chart-labels="doughnutObj.labels"
+                            chart-legend="true"
+                            chart-options="options">
+                    </canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div ng-if="satisfactionRequest.length!=0" class="row">
+    <div class="widget-dyn">
+        <!--ng-repeat="r in satisfactionReport"-->
+        <div class="widget-dy-wrp " id="all"
+             ng-click="searchDataBySatisfaction('all')">
+            <div class="active-card">
+                <div class="selected-group">
+                    <i class="ti-check"></i>
+                </div>
+            </div>
+            <div class="col-xs-12 ">
+                <div class="row">
+                    <div class="w-bg-text text-left ">
+                        All
+                    </div>
+                    <div class="w-bg-text-bg text-left txt-color-b-500 ">
+                        {{pageTotal}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget-dy-wrp "
+             id="{{r._id}}"
+             ng-repeat="r in satisfactionReport"
+             ng-click="searchDataBySatisfaction(r._id)">
+            <div class="active-card">
+                <div class="selected-group">
+                    <i class="ti-check"></i>
+                </div>
+            </div>
+            <div class="col-xs-12 ">
+                <div class="row">
+                    <div class="w-bg-text text-left ">
+                        {{r._id}}
+                    </div>
+                    <div class="w-bg-text-bg text-left txt-color-b-500 ">
+                        {{r.satisfactions}}
+                    </div>
+                </div>
+                <div class="row">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div ng-if="satisfactionRequest.length!=0" class="row">
+    <div class="col-md-12 col-sm-6 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Details
+                    <small> {{csatSerach.StartTime| date : 'dd-MM-yyyy, HH:mm'}} To {{csatSerach.EndTime| date :
+                        'dd-MM-yyyy, HH:mm'}}
+                    </small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div class="x_content">
+                <div ng-show="isLoading">
+                    <div class="row ">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="data-state-wrap">
+                                Please Wait...
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="noDataToshow">
+                    <div class="row ">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="data-state-wrap">
+                                No Data...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-hide="isLoading">
+                    <div class="col-sm-12">
+                        <div class="table-wrapper">
+                            <table id="datatable-responsive" dt-options="dtOptions" datatable="ng"
+                                   class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline"
+                                   cellspacing="0" width="100%" role="grid"
+                                   aria-describedby="datatable-responsive_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="Call Direction">Satisfaction
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="From">method
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="To">submitter
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="AgentSkill">requester
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="Call Time">contact
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="Call Time">ticket
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="Total Duration">comment
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                        rowspan="1"
+                                        colspan="1" aria-label="Answer Duration">created at
+                                    </th>
+
+                                </thead>
+                                <tbody>
+                                <tr role="row" class="odd"
+                                    ng-repeat="cdr in satisfactionRequest">
+                                    <td>{{cdr.satisfaction}}</td>
+                                    <td>{{cdr.method}}</td>
+                                    <td>{{cdr.submitter?(cdr.submitter.firstname+" "+cdr.submitter.lastname):"Unknown"}}</td>
+                                    <td>{{cdr.requester?cdr.requester.username:"Unknown"}}</td>
+                                    <td>{{cdr.contact?cdr.contact:"Unknown"}}</td>
+                                    <td>{{cdr.ticket?cdr.ticket.reference:""}}</td>
+                                    <td>{{cdr.comment}}</td>
+                                    <td>{{cdr.created_at| date : 'dd-MM-yyyy, HH:mm'}}</td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <paging ng-show="showPaging"
+                            class="small"
+                            page="currentPage"
+                            page-size="pageSize"
+                            total="pageTotal"
+                            show-prev-next="true"
+                            show-first-last="true"
+                            text-next-class="glyphicon glyphicon-chevron-right"
+                            text-prev-class="glyphicon glyphicon-chevron-left"
+                            text-first-class="glyphicon glyphicon-backward"
+                            text-last-class="glyphicon glyphicon-forward"
+                            paging-action="getPageData('Paging Clicked', page, pageSize, total)">
+                    </paging>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

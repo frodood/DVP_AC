@@ -1,0 +1,321 @@
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Agent List</h2>
+            <div class="clearfix">
+                <button type="button"
+                        ng-class="{'active-btn':showDetails==true,
+                        '':showDetails==false}"
+                        class="btn btn-success btn-sm pull-right attribute-btn"
+                        ng-click="showDetailsCard();">
+                    Details Card
+                </button>
+                <button type="button"
+                        ng-class="{'active-btn':largeCard==true,
+                        '':largeCard==false}"
+                        class="btn btn-success btn-sm pull-right attribute-btn"
+                        ng-click="showLargeCard();">
+                    Large Card
+                </button>
+                <button type="button"
+                        ng-class="{'active-btn':smallCard==true,
+                        '':smallCard==false}"
+                        class="btn btn-success btn-sm pull-right attribute-btn"
+                        ng-click="showSmallCard();">
+                    Small Card
+                </button>
+                <button type="button"
+                        ng-class="{'active-btn':summary==true,
+                        '':summary==false}"
+                        class="btn btn-success btn-sm pull-right attribute-btn"
+                        ng-click="showTableCard();">
+                    Table
+                </button>
+            </div>
+
+            <div class="x_content">
+                <div class="col-md-12 col-sm-6 col-xs-12">
+                    <div class="x_content">
+                        <div class="row">
+                            <form id="csatForm" name="csatForm" novalidate>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12  form-group">
+                                    <div class="form-group">
+                                        <label>Agent</label>
+                                        <div class="input-group col-md-12">
+                                            <tags-input ng-model="profile" display-property="ResourceName" key-property="ResourceName"
+                                                        placeholder="Select Agent"
+                                                        add-from-autocomplete-only="true" min-length="0" on-tag-removed="ResourceAdded()" on-tag-added="ResourceAdded()">
+                                                <auto-complete source="querySearch($query)" load-on-empty="true"
+                                                               max-results-to-show="10000" min-length="1"
+                                                               load-on-focus="true"></auto-complete>
+                                            </tags-input>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12  form-group">
+                                    <div class="form-group">
+                                        <label>Agent Mode</label>
+                                        <div class="input-group col-md-12">
+                                            <tags-input ng-model="agentMode" display-property="Name" key-property="Name"
+                                                        placeholder="Select Agent"
+                                                        add-from-autocomplete-only="true" min-length="0" on-tag-removed="AgentModeAdded()" on-tag-added="AgentModeAdded()">
+                                                <auto-complete source="agentModeQuerySearch($query)" load-on-empty="true"
+                                                               max-results-to-show="10000" min-length="1"
+                                                               load-on-focus="true"></auto-complete>
+                                            </tags-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-12">
+                                    <button ng-disabled="csatForm.$invalid || isLoading" type="button"
+                                            class="btn btn-green btn-block "
+                                            style="margin-top: 24px;"
+                                            ng-click="LoadProductivity();">
+                                        Load
+                                    </button>
+                                    <!--<button disabled type="button"
+                                            ng-if="isLoading"
+                                            class="btn btn-green btn-block"
+                                            style="margin-top: 24px;">
+                                        Please Wait...
+                                    </button>-->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="x_content">
+            <br>
+
+            <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                <div ng-show="isLoading" >
+                    <div class="row ">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="data-state-wrap">
+                                Please Wait...
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12" ng-hide="isLoading">
+                    <div class="row" ng-show="showDetails">
+                        <agentstatus call-infos="showCallInfos" show-summary="summary"
+                                     productivity-list="Productivitys"
+                                     res-item="res"
+                                     active-call-list="activeCalls"
+                                     view-state="1"
+                                     attributes-list="attributesList" productivity="res" ng-repeat="res in Productivitys"></agentstatus>
+                    </div>
+
+                    <div class="row" ng-show="smallCard">
+                        <agentstatus call-infos="showCallInfos" show-summary="summary" productivity-list="Productivitys"
+                                     res-item="res"
+                                     active-call-list="activeCalls"
+                                     view-state="2"
+                                     attributes-list="attributesList" productivity="res" ng-repeat="res in Productivitys">
+                    </div>
+
+                    <div class="row" ng-show="largeCard">
+                        <agentstatus call-infos="showCallInfos" show-summary="summary" productivity-list="Productivitys"
+                                     res-item="res"
+                                     active-call-list="activeCalls"
+                                     view-state="3"
+                                     attributes-list="attributesList" productivity="res" ng-repeat="res in Productivitys">
+                    </div>
+
+                    <div ng-show="summary" class="table-wrapper"
+                         ng-slimscroll horizontal-scroll="true"
+                         height="100%"
+                         width="100%"
+                         horizontal-scroll-position="bottom"
+                         size="5px" opacity="0.4">
+                        <table id="datatable-responsive"
+                               class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline"
+                               cellspacing="0" width="100%" role="grid"
+                               aria-describedby="datatable-responsive_info">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="Tasks">Tasks
+                                </th>
+                                <th ng-show="showCallDetails" class="sorting" tabindex="0"
+                                    aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="Call Info">Call Info
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="Name">Name
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="State">State
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="State Time">State Time
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="AcwTime">AcwTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="BreakTime">BreakTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="HoldTime">HoldTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="OnCallTime">OnCallTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="IdleTime">IdleTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="StaffedTime">StaffedTime
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="IncomingCallCount">IncomingCallCount
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="IncomingCallCount">OutgoingCallCount
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="MissCallCount">MissCallCount
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="datatable-responsive"
+                                    rowspan="1"
+                                    colspan="1" aria-label="TransferCallCount">TransferCallCount
+                                </th>
+
+                            </thead>
+                            <tbody>
+                            <tr role="row" class="odd"
+                                ng-repeat="productivity in Productivitys">
+                                <th class="fs15 text-right"><!-- task -->
+                                    <div ng-repeat="task in productivity.taskList">
+                                        <small>{{task.taskType}}</small>
+                                        <small>{{task.skill}}</small>
+                                        <small>{{task.percentage}}%</small>
+                                    </div>
+                                </th>
+                                <th class="fs15 text-left" ng-show="showCallDetails">
+                                    <div ng-repeat="call in productivity.callInfos">
+                                        <small>connect with : {{call["Caller-Caller-ID-Number"]}}</small>
+                                        <small>Direction : {{call["DVP-Call-Direction"]}}</small>
+                                    </div>
+                                </th>
+                                <th class="fs15 text-left">{{productivity.ResourceName}}</th>
+                                <th class="fs15 text-right">{{productivity.slotState}}</th>
+                                <th class="fs15 text-right">{{productivity.slotStateTime}}</th>
+                                <th class="fs15 text-right">{{productivity.AcwTime| secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right">{{productivity.BreakTime| secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right">{{productivity.HoldTime| secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right">{{productivity.OnCallTime| secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right"> {{productivity.IdleTime| secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right">{{productivity.StaffedTime | secondsToDateTime |
+                                    date:'HH:mm:ss'}}
+                                </th>
+                                <th class="fs15 text-right">{{productivity.IncomingCallCount}}</th>
+                                <th class="fs15 text-right">{{productivity.OutgoingCallCount}}</th>
+                                <th class="fs15 text-right">{{productivity.MissCallCount}}</th>
+                                <th class="fs15 text-right">{{productivity.TransferCallCount}}</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!--<div ng-show="summary" class="col-md-12 col-sm-12 col-xs-12">
+                        <table class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline">
+                            <thead>
+                            <tr>
+                                <th class="fs15 text-right">Tasks</th>
+                                <th class="fs15 text-left" ng-show="showCallDetails" >Call Info</th>
+                                <th class="fs15 text-left">Name</th>
+                                <th class="fs15 text-right">State</th>
+                                <th class="fs15 text-right">State Time</th>
+                                &lt;!&ndash;<th class="fs15 text-right">Staffed Time</th>&ndash;&gt;
+                                <th class="fs15 text-right">AcwTime</th>
+                                <th class="fs15 text-right">BreakTime</th>
+                                <th class="fs15 text-right">HoldTime</th>
+                                <th class="fs15 text-right">OnCallTime</th>
+                                <th class="fs15 text-right">IdleTime</th>
+                                <th class="fs15 text-right">StaffedTime</th>
+                                <th class="fs15 text-right">IncomingCallCount</th>
+                                <th class="fs15 text-right">MissCallCount</th>
+                                <th class="fs15 text-right">TransferCallCount</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr  ng-repeat="productivity in Productivitys">
+
+                                <th class="fs15 text-right">&lt;!&ndash; task &ndash;&gt;
+                                    <div ng-repeat="task in productivity.taskList">
+                                        <small>{{task.taskType}}</small>
+                                        <small>{{task.skill}}</small>
+                                        <small>{{task.percentage}}%</small>
+                                    </div>
+                                </th>
+                                <th class="fs15 text-left" ng-show="showCallDetails" >
+                                    <div ng-repeat="call in productivity.callInfos">
+                                        <small>connect with : {{call["Caller-Caller-ID-Number"]}}</small>
+                                        <small>Direction : {{call["DVP-Call-Direction"]}}</small>
+                                    </div>
+                                </th>
+                                <th class="fs15 text-left">{{productivity.ResourceName}}</th>
+                                <th class="fs15 text-right">{{productivity.slotState}}</th>
+                                <th class="fs15 text-right">{{productivity.slotStateTime}}</th>
+                                <th class="fs15 text-right">{{productivity.AcwTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{productivity.BreakTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{productivity.HoldTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{productivity.OnCallTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right"> {{productivity.IdleTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{productivity.StaffedTime | secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{productivity.IncomingCallCount}}</th>
+                                <th class="fs15 text-right">{{productivity.MissCallCount}}</th>
+                                <th class="fs15 text-right">{{productivity.TransferCallCount}}</th>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>-->
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

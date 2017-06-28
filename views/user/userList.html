@@ -1,0 +1,351 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <uib-tabset active="0">
+            <!-- user configuration -->
+            <uib-tab index="0" heading="User Configuration">
+                <div class="x_panel bg-light-gray">
+                    <div class="x_title col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-md-5 col-sm-5 col-xs-5">
+                            <h2 class="font-robot font-300 text-uppercase font-15">Create new User</h2>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group top_search">
+                            <div class="input-group">
+                                <input type="text" ng-model="searchCriteria" class="form-control"
+                                       placeholder="Search for...">
+                                <span class="input-group-btn">
+                                  <button class="btn btn-default" type="button">Go!</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <!--<div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">-->
+                                    <!--<input type="text" class="form-control has-feedback-left" placeholder="Username"-->
+                                           <!--ng-model="newUser.username">-->
+                                    <!--<span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>-->
+                                <!--</div>-->
+
+                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left"
+                                           placeholder="E-mail Address"
+                                           ng-model="newUser.mail">
+                                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                    <div ng-show="pwdBox">
+                                        <password-strength-box ng-model="newUser.password"
+                                                               box="pwdBox"
+                                                               confirm="confirmPwd">
+
+                                        </password-strength-box>
+                                    </div>
+
+                                    <input type="password" class="form-control has-feedback-left" placeholder="Password"
+                                           ng-model="newUser.password" ng-focus="showPasswordHints()" ng-blur="showPasswordHints()">
+                                    <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                    <select class="select2_single form-control" tabindex="-1" aria-hidden="true"
+                                            placeholder="Role" name="role" ng-model="newUser.role">
+                                        <option value="admin">Admin</option>
+                                        <option value="agent">Agent</option>
+                                        <option value="supervisor">Supervisor</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2 col-sm-2 col-xs-12 form-group has-feedback">
+                                    <select class="select2_single form-control" tabindex="-1" aria-hidden="true"
+                                            placeholder="Title" name="title" ng-model="newUser.title">
+                                        <option value="mr">Mr</option>
+                                        <option value="mrs">Mrs</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" placeholder="First Name"
+                                           ng-model="newUser.firstname">
+                                    <span class="fa fa-meh-o form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" placeholder="Last Name"
+                                           ng-model="newUser.lastname">
+                                    <span class="fa fa-meh-o form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+
+
+                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" placeholder="Phone Number"
+                                           ng-model="newUser.phone">
+                                    <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" placeholder="Nick Name"
+                                           ng-model="newUser.name">
+                                    <span class="fa fa-meh-o form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <button class="btn btn-success" ng-click="addNewUser()"
+                                            ng-disabled="!(newUser.password && newUser.name &&
+                                         newUser.mail && newUser.phone && newUser.role)">
+                                        Add User
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end -->
+
+                <!-- view user details -->
+                <div class="x_panel">
+                    <div class="x_content col-md-12 col-sm-12 col-xs-12">
+                        <ul class="list-unstyled msg_list">
+                            <div class="mail_list_column sip-user-wrap"
+                                 ng-mouseover="viewScroll()"
+                                 ng-mouseleave="hideScroll()"
+                                 ng-slimscroll
+                                 height="670" width="100%" opacity="0.2" distance="0px"
+                                 enabled="{{ scrollEnabled }}">
+                                <a href="javascript:void(0);" class="user-wrap hover-none"
+                                   ng-repeat="item in userList | filterBy: ['username']: searchCriteria">
+                                    <div class="mail_list user-list">
+                                        <div class="right user-option-wrap">
+                                            <h3 class="font-robot sub-header">
+                                                {{item.username}}
+                                                <small ng-if="item.user_meta.role !== 'admin'" class="fa fa-trash"
+                                                       ng-click="removeUser(item.username)"></small>
+                                                <small class="fa fa-cog" ng-click="viewPermissions(item)"></small>
+                                                <small class="fa fa-user" ng-click="viewProfile(item.username)"></small>
+                                            </h3>
+
+                                            <h2 class="sub-header">
+                                                {{item.firstname}} {{item.lastname}}
+                                            </h2>
+
+                                            <p class="font-robot">
+                                                <i class="fa fa-envelope-square"
+                                                   style="padding-right: 10px;"></i> {{item.email.contact}}
+                                            </p>
+                                            <p class="font-robot">
+                                                <i class="fa fa-phone"
+                                                   style="padding-right: 10px;"></i>{{item.phoneNumber.contact}}
+                                            </p>
+                                            <p>
+                                                <small class="embed-wrap"> {{item.user_meta.role}}</small>
+                                            </p>
+                                        </div>
+                                        <div class="left">
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end -->
+            </uib-tab>
+            <!-- user group -->
+            <uib-tab index="1" heading="User-group Configuration">
+                <div class="row">
+
+                    <div class="col-lg-12  col-md-12 col-xs-12">
+                        <div class="x_panel user-group-wrapper">
+                            <!--user group list -->
+                            <div class="col-lg-4 col-md-5 col-xs-6"
+                                 style="padding-right: 0px">
+                                <div class="user-group-list">
+                                    <!-- header -->
+                                    <div class="header">
+                                        <h5>User Group</h5>
+                                        <div class="row">
+                                            <div class="col-lg-8 col-xs-12"
+                                                 style="padding-right: 0px">
+                                                <div class="search-wrapper">
+                                                    <input type="text"
+                                                           ng-model="searchCriteria"
+                                                           placeholder="search group here"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-xs-12">
+                                                <div class="create-new">
+                                                    <button class="btn btn-default " ng-click="createNewGroup();">
+                                                        New Group
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- create new group -->
+                                        <div id="crateNewGroupWrapper" class="new-group-wrapper">
+                                            <ul class="group-inline-des">
+                                                <li>
+                                                    <div class="create-new header">
+                                                        <h5>Create New Group</h5>
+                                                    </div>
+                                                </li>
+                                                <li class="pull-right">
+                                                    <div class="create-new" style="padding-top: 2px;">
+                                                        <button class="btn btn-default btn-remove"
+                                                                ng-click="addNewUserGroup();"
+                                                                ng-disabled="!(newUserGroup.name)">
+                                                            save
+                                                        </button>
+                                                        <button style="margin-right: 0px;"
+                                                                class="btn btn-default btn-remove"
+                                                                ng-click="hiddenNewGroupDIV()">
+                                                            cancel
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-xs-12">
+                                                    <div class="search-wrapper">
+                                                        <input type="text" style="width: 100%"
+                                                               ng-model="newUserGroup.name"
+                                                               required
+                                                               placeholder="group name *"
+                                                               class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- user list wrapper -->
+                                    <div class="group-wrapper">
+                                        <div class="group"
+                                             ng-class="group.name == selectedGroup.name ? 'active-group' : ''"
+                                             ng-click="loadGroupMembers(group)"
+                                             ng-repeat="group in userGroupList | filterBy: ['name']: searchCriteria">
+                                            <div class="col-md-3 col-lg-3 col-xs-6">
+                                                <div class="group-img">
+                                                    <img src="assets/images/group.png">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9 col-lg-9 col-xs-6">
+                                                <ul class="group-inline-des">
+                                                    <li class="pull-left">
+                                                        <div class="group-desc">
+                                                            <h5>
+                                                                {{group.name}}
+                                                            </h5>
+                                                        </div>
+                                                    </li>
+                                                    <li class="pull-right"
+                                                        ng-show="group.name == selectedGroup.name">
+                                                        <div class="selected-group">
+                                                            <i class="ti-check"></i>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--#add new user to group member  -->
+                            <div class="col-lg-8 col-md-7 col-xs-6" style="padding-left: 0px">
+                                <div class="group-member-list">
+                                    <!-- header -->
+                                    <div class="header">
+                                        <h5>Group member</h5>
+                                        <div class="row">
+                                            <div class="col-lg-8 col-xs-12"
+                                                 style="padding-right: 0px">
+                                                <div class="search-wrapper">
+                                                    <input type="text"
+                                                           ng-model="searchMember"
+                                                           placeholder="search group member here"
+                                                           class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-xs-12" style="padding-left: 0px;">
+                                                <div class="create-new">
+                                                    <button class="btn btn-default "
+                                                            ng-click="addNewGroupMember()">
+                                                        Add User
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- #add new group member -->
+                                        <!-- create new group -->
+                                        <div id="crateNewGroupMemberWrapper" class="new-group-wrapper new-group-member">
+                                            <ul class="group-inline-des">
+                                                <li>
+                                                    <div class="create-new header">
+                                                        <h5>Add GROUP MEMBER</h5>
+                                                    </div>
+                                                </li>
+                                                <li class="pull-right">
+                                                    <div class="create-new" style="padding-top: 2px;">
+                                                        <button class="btn btn-default btn-remove"
+                                                                ng-click="addUserToGroup(newMember._id)">
+                                                            save
+                                                        </button>
+                                                        <button style="margin-right: 0px;"
+                                                                class="btn btn-default btn-remove"
+                                                                ng-click="hiddenNewGroupMember()">
+                                                            cancel
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-xs-12">
+                                                    <div class="search-wrapper">
+                                                        <select class="select2_single form-control" tabindex="-1"
+                                                                aria-hidden="true"
+                                                                placeholder="Title" name="title" ng-model="newMember"
+                                                                ng-options="user.username for user in agents"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- #view group member -->
+                                    <div class="group-wrapper group-member-wrapper">
+                                        <div class="group-load-wrapper" ng-show="isLoadingUsers">
+                                            <div class="loader-md-90"></div>
+                                        </div>
+                                        <div class="group-data-error"
+                                             ng-show="!isLoadingUsers && groupMemberlist.length==0">
+                                            please add user
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xs-6"
+                                             ng-repeat="member in groupMemberlist | filterBy: ['username']: searchMember">
+                                            <div class="group-member">
+                                                <div class="member-img">
+                                                    <img ng-src="{{member.avatar}}"
+                                                         src="assets/images/defaultProfile.png">
+                                                </div>
+                                                <div class="member-name">
+                                                    <h5>{{member.username}}</h5>
+                                                </div>
+                                                <button class="btn btn-sm btn-default btn-remove"
+                                                        ng-click="removeGroupMember(member._id)">
+                                                    remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+
+</div>
+

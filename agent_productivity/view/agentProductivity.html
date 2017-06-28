@@ -1,0 +1,100 @@
+<div class="row" ng-controller="resourceProductivityController">
+    <div class="col-md-12 col-sm-6 col-xs-12" >
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Agent Productivity</h2>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-6 col-xs-12">
+                    <div class="x_content">
+                        <div class="row">
+                            <form id="csatForm" name="csatForm" novalidate>
+
+                                <div class="col-md-11 col-sm-11 col-xs-12  form-group">
+                                    <div class="form-group">
+                                        <label>Agent</label>
+                                        <div class="input-group col-md-12">
+                                            <tags-input ng-model="OnlineAgents" display-property="ResourceName" key-property="ResourceName"
+                                                        placeholder="Select Agent"
+                                                        add-from-autocomplete-only="true" min-length="0" on-tag-removed="AgentAdded()" on-tag-added="AgentAdded()">
+                                                <auto-complete source="querySearch($query)" load-on-empty="true"
+                                                               max-results-to-show="10000" min-length="1"
+                                                               load-on-focus="true"></auto-complete>
+                                            </tags-input>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1 col-sm-1 col-xs-12">
+                                    <button ng-disabled="csatForm.$invalid" type="button"
+                                            ng-if="!isLoading"
+                                            class="btn btn-green btn-block "
+                                            style="margin-top: 24px;"
+                                            ng-click="getProductivity();">
+                                        Load
+                                    </button>
+                                    <button disabled type="button"
+                                            ng-if="isLoading"
+                                            class="btn btn-green btn-block"
+                                            style="margin-top: 24px;">
+                                        Please Wait...
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="col-md-12 col-sm-6 col-xs-12" >
+        <div class="x_panel">
+            <div ng-show="isLoading" >
+                <div class="row ">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="data-state-wrap">
+                            Please Wait...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-3 col-xs-12" ng-repeat="p in OnlineAgents">
+                    <div class="x_panel x-panel-overflow ">
+                        <div class="x_content productivity-panel">
+                            <!--<div class="x_title ">-->
+                                <!--&lt;!&ndash;<h4 ng-if="p.ResourceName.length < 21"-->
+                                    <!--class="font-robot font-300 text-uppercase ">-->
+                                    <!--{{p.ResourceName}}-->
+                                <!--</h4>&ndash;&gt;-->
+
+                                <!--&lt;!&ndash;<h4 class="font-robot font-300 text-uppercase "-->
+                                    <!--ng-if="p.ResourceName.length > 19"-->
+                                    <!--tooltip-placement="top"-->
+                                    <!--uib-tooltip="{{p.ResourceName}}">-->
+                                    <!--{{ p.ResourceName | limitTo: 19 }}{{p.ResourceName.length > 19 ?-->
+                                    <!--'...':''}}-->
+                                <!--</h4>&ndash;&gt;-->
+                                <!--<div class="clearfix"></div>-->
+                            <!--</div>-->
+                            <div id="{{p.ResourceId}}" style="height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+

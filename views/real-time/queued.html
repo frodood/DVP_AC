@@ -1,0 +1,83 @@
+<div ng-controller="realTimeQueuedCtrl">
+    <div>
+        <div class="clearfix">
+            <!--<button type="button" class="btn btn-success btn-sm pull-right attribute-btn"-->
+            <!--ng-click="changeView();">-->
+            <!--{{summaryText}}-->
+            <!--</button>-->
+
+            <div class="col-lg-12 m-bottom20" >
+                <div class="row">
+                    <div class="btn-group pull-right">
+                        <label class="btn btn-sm btn-default" ng-click="changeCardView('small')" ng-model="cardViewMode"
+                               uib-btn-radio="'small'"
+                               uncheckable>Small </label>
+                        <label class="btn btn-sm btn-default" ng-click="changeCardView('medium')"
+                               ng-model="cardViewMode"
+                               uib-btn-radio="'medium'"
+                               uncheckable>Medium</label>
+                        <label class="btn btn-sm btn-default" ng-click="changeCardView('large')" ng-model="cardViewMode"
+                               uib-btn-radio="'large'"
+                               uncheckable>large</label>
+                        <label class="btn btn-sm btn-default" ng-click="changeCardView('table')" ng-model="cardViewMode"
+                               uib-btn-radio="'table'"
+                               uncheckable>Table</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="cardViewMode!='table'">
+        <div ng-repeat="(qkey, que) in queues">
+            <queued que="que" name="{{que.id}}" viewmode="cardViewMode"
+                    queueoption="queueoption" pieoption="pieoption"></queued>
+        </div>
+    </div>
+
+    <!--- Queued table -->
+    <div class="row" ng-if="cardViewMode=='table'">
+        <div class="x_panel">
+            <div class="x_content">
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-wrapper"
+                         ng-slimscroll horizontal-scroll="true"
+                         height="100%"
+                         horizontal-scroll-position="bottom"
+                         size="5px" opacity="0.4">
+                        <table class="table table-striped task-tbl">
+                            <thead>
+                            <tr>
+                                <th class="fs15 text-left">Queue Name</th>
+                                <th class="fs15 text-right">Current waiting</th>
+                                <th class="fs15 text-right">Current max waiting Time</th>
+                                <th class="fs15 text-right">Total Queued</th>
+                                <th class="fs15 text-right">Max wait Time</th>
+                                <th class="fs15 text-right">Avg. Wait Time</th>
+                                <th class="fs15 text-right">Precentage</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr queuedlist ng-repeat="que in queues" name="{{que.id}}">
+                                <!--<th class="fs15 text-left">{{que.queuename}}</th>
+                                <th class="fs15 text-right">{{que.CurrentWaiting}}</th>
+                                <th class="fs15 text-right">{{que.CurrentMaxWaitTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{que.TotalQueued}}</th>
+                                <th class="fs15 text-right">{{que.MaxWaitTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{que.AverageWaitTime| secondsToDateTime | date:'HH:mm:ss'}}</th>
+                                <th class="fs15 text-right">{{que.presentage}}</th>-->
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

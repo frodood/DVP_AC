@@ -1,0 +1,173 @@
+<div id="main" ng-controller="dashboardCtrl">
+
+
+    <div class>
+        <div class="row top_tiles">
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-red50">
+                    <div class="icon">
+                        <i class="fa fa-phone font-gray800"></i>
+                    </div>
+                    <div class="count">{{total.callsInb}}/{{total.callsOutb}}</div>
+                    <h3 class="font-robot font-700 font-gray800">
+                        Total Calls
+                    </h3>
+                    <p class="font-robot font-200">Total calls</p>
+                    <p class="font-robot font-200">(Inbound/Outbound)</p>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-green100">
+                    <div class="icon">
+                        <i class="fa fa-coffee font-yellow800"></i></div>
+                    <div class="count">{{total.queued}}</div>
+                    <h3 class="font-robot font-700 font-yellow800">Queued</h3>
+                    <p class="font-robot font-200"> Total queued</p>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-blue700">
+                    <div class="icon">
+                        <i class="fa fa-smile-o font-orange800"></i>
+                    </div>
+                    <div class="count">{{total.queueAnswered}}</div>
+                    <h3 class="font-robot font-700 font-orange800">Q Answered</h3>
+                    <p class="font-robot font-200">Total queued Answered</p>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-yellow300">
+                    <div class="icon"><i class="fa  fa-frown-o font-black500"></i></div>
+                    <div class="count">{{total.queueDropped}}</div>
+                    <h3 class="font-robot font-700 font-black500"> Q Dropped</h3>
+                    <p class="font-robot font-200">Total queued dropped</p>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-green100">
+                    <div class="icon"><i class="fa fa-hourglass-start font-yellow800"></i></div>
+                    <div class="count">{{total.waiting}}</div>
+                    <h3 class="font-robot font-700 font-yellow800"> Waiting</h3>
+                    <p class="font-robot font-200">Current waiting</p>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                <div class="tile-stats card-dashboard bg-blue700">
+                    <div class="icon"><i class="fa fa-rocket font-orange800"></i></div>
+                    <div class="count">{{total.onGoingInb}}/{{total.onGoingOutb}}</div>
+                    <h3 class="font-robot font-700 font-orange800"> Ongoing</h3>
+                    <p class="font-robot font-200 ">Ongoing </p>
+                    <p class="font-robot font-200 ">(Inbound / Outbound)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="x_panel main-dashboard-wrap">
+                <div class="x_title">
+                    <h2>Center status
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content m-bottom20">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                        <span class="font-robot small-chat-header">Total calls received for last 5 min</span>
+                        <div class="demo-container m-top15" style="height:280px">
+                            <flot id="callHit" dataset="dataSetAll"
+                                  options="myChartOptions"></flot>
+                        </div>
+                        <div class="tiles">
+
+                            <div class="col-md-4 col-sm-12 col-xs-12 tile m-top45 p-top-10">
+                                <span class="font-robot small-chat-header"> Calls in queue for last 5 min</span>
+                                <div class="demo-container m-top15" style="height:160px">
+                                    <flot dataset="dataSetChannels"
+                                          options="myChartOptions4"></flot>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 col-xs-12  tile m-top45 p-top-10">
+                                <span class="font-robot small-chat-header"> Total calls queued for last 5 min</span>
+                                <div class="sparkline11 demo-container m-top15" style="height:160px">
+                                    <flot dataset="dataSetQueued"
+                                          options="myChartOptions2"></flot>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 col-xs-12  tile m-top45 p-top-10">
+                                <span class="font-robot small-chat-header"> Calls bridged for last 5 min</span>
+                                <div class="sparkline11 demo-container m-top15" style="height:160px">
+                                    <flot dataset="dataSetBriged"
+                                          options="myChartOptions3"></flot>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div>
+                            <div class="x_title">
+                                <h2>Top Profiles</h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div ng-slimscroll
+                                 height="550px"
+                                 width="100%"
+                                 ng-mouseover="chatWidgetscrollEnabled = true"
+                                 ng-mouseleave="chatWidgetscrollEnabled = false"
+                                 enabled="{{ chatWidgetscrollEnabled }}"
+                                 size="5px" opacity="0.4">
+                                <ul class="list-unstyled top_profiles scroll-view">
+                                    <li class="media event "
+                                        ng-class="{'reserved':resource.slotInfo[0].slotState=='Reserved',
+                                               'available':resource.slotInfo[0].slotState=='Available',
+                                               'connected':resource.slotInfo[0].slotState=='Connected',
+                                               'afterWork':resource.slotInfo[0].slotState=='AfterWork',
+                                               'outbound':resource.slotInfo[0].slotState=='Outbound',
+                                               'suspended':resource.slotInfo[0].slotState=='Suspended',
+                                               'other':resource.slotInfo[0].slotState=='Other',
+                                               'break':resource.slotInfo[0].other=='Break'}"
+                                        ng-repeat="resource in ResourceTask.CALL.concat(ResourceTask.OFFLINE) | orderBy: 'LastReservedTime':true track by $index">
+                                        <div class="profile-status-dah"></div>
+                                        <div class="pull-left border-aero profile_thumb ">
+                                            <img src="assets/images/defaultProfile.png"
+                                                 ng-src="{{resource.avatar}}"/>
+                                        </div>
+                                        <div class="media-body">
+                                            <a class="title" href="javascript:void(0)">
+                                                {{ resource.name | limitTo: 10 }}{{resource.name.length > 10 ? '...' :
+                                                ''}}
+                                            </a>
+                                            <p>{{resource.slotInfo[0].LastReservedTime}} </p>
+                                            <div class="s-state">
+                                                {{resource.slotInfo[0].slotState}}
+                                                <div class="s-mode">
+                                                    <i ng-if="resource.slotInfo[0].slotMode=='Inbound'"
+                                                       class="main-icon-2-telephone-7 inbound"></i>
+                                                    <i ng-if="resource.slotInfo[0].slotMode=='Outbound'"
+                                                       class="main-icon-2-telephone-6 outbound"></i>
+                                                    <i ng-if="resource.slotInfo[0].slotMode=='Offline'"
+                                                       class="main-icon-2-telephone-4 offline"></i>
+                                                </div>
+                                            </div>
+                                            <!--<p>-->
+                                            <!--<small>-->
+                                            <!--{{resource.slotInfo[0].slotMode}}-->
+                                            <!--</small>-->
+                                            <!--</p>-->
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
